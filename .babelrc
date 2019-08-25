@@ -1,0 +1,29 @@
+{
+    "presets": [
+        [
+            "env",
+            {
+                "targets": {
+                    "node": "8.9.4",
+                    "browsers": [
+                        "Chrome >= 65"
+                    ]
+                },
+                "include": [
+                    "babel-plugin-transform-es2015-classes"
+                ]
+            }
+        ],
+        "react"
+    ],
+    "env": {
+        "development": {
+            "presets": [
+                "react-hmre"
+            ],
+            "plugins": [
+                "transform-class-properties"
+            ]
+        }
+    }
+}
