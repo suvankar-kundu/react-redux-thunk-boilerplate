@@ -19,7 +19,7 @@
     "env": {
         "development": {
             "presets": [
-                "react-hmre"
+                "react-hmre" // disabled when build react app for production
             ],
             "plugins": [
                 "transform-class-properties"

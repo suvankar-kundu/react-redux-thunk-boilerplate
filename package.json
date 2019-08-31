@@ -3,14 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.16.3",
+    "mongoose": "^5.6.11",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
     "redux": "^4.0.4",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "winston": "2.4.0",
+    "winston-daily-rotate-file": "1.7.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -20,11 +28,13 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-hmre": "^1.1.1",
+    "copy-webpack-plugin": "^5.0.4",
     "css": "^2.2.1",
     "css-loader": "^0.28.11",
     "redux-immutable-state-invariant": "^2.1.0",
     "rimraf": "^2.6.2",
     "style-loader": "^0.20.3",
+    "swagger-ui-express": "^4.0.7",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
     "webpack-dev-middleware": "^3.1.0",
@@ -37,7 +47,7 @@
     "build:server": "node_modules/.bin/webpack --config build/webpack.server.dist.babel.js",
     "clean": "node_modules/.bin/rimraf ./dist",
     "prebuild": "npm run clean",
-    "start": "node_modules/.bin/babel-node ./src/server/index.dev.js",
+    "start": "node_modules/.bin/babel-node ./src/server/src/index.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

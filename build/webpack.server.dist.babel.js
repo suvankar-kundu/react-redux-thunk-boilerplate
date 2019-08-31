@@ -1,6 +1,6 @@
 import path from 'path';
 import webpackNodeExternals from 'webpack-node-externals'
-
+import CopyPlugin from 'copy-webpack-plugin';
 export default {
     target: 'node',
     mode: 'production',
@@ -13,7 +13,7 @@ export default {
         __filename: false
     },
     entry: {
-        index: './index.js'
+        index: './src/index.js'
     },
     output: {
         path: path.join(__dirname, '../dist'),
@@ -27,5 +27,11 @@ export default {
                 exclude: /node_modules/
             }
         ]
-    }
+    },
+    plugins: [
+        new CopyPlugin([{
+            from: '../*.html',
+            to: 'index.html'
+        }])
+    ]
 };
