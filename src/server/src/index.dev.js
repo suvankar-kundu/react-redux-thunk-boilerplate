@@ -11,34 +11,32 @@ import WebpackDevMiddleware from 'webpack-dev-middleware';
 import WebpackHotMiddleware from 'webpack-hot-middleware';
 import WebpackDevConfig from '../../../build/webpack.app.dev.babel';
 
-//#region Common components
+// #region Common components
 import ApplicationLogger from './common/lib/logger';
-//#endregion
+// #endregion
 const PORT = process.env.PORT || 5000;
 Promise.all([
-    initDb(dbConfig.cnd)
+  initDb(dbConfig.cnd)
 ]).then(async ([dbConnection]) => {
+  const compiler = Webpack(WebpackDevConfig);
+  const logger = new ApplicationLogger(logConfig);
+  const app = await appLication(logger, dbConnection, corsConfig, securityConfig);
 
-    const compiler = Webpack(WebpackDevConfig);
-    const logger = new ApplicationLogger(logConfig);
-    const app = await appLication(logger, dbConnection, corsConfig, securityConfig);
+  app.use(WebpackDevMiddleware(compiler, {
+    publicPath: WebpackDevConfig.output.publicPath
+  }));
+  app.use(WebpackHotMiddleware(compiler));
 
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../index.html'));
+  });
 
-    app.use(WebpackDevMiddleware(compiler, {
-        publicPath: WebpackDevConfig.output.publicPath
-    }));
-    app.use(WebpackHotMiddleware(compiler));
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../../index.html'));
-    });
-
-    app.listen(PORT, () => {
-        logger.info(`Server started on port ${PORT}`);
-    });
-    process.on('SIGINT', async () => {
-        await dbConnection.close();
-    });
+  app.listen(PORT, () => {
+    logger.info(`Server started on port ${PORT}`);
+  });
+  process.on('SIGINT', async () => {
+    await dbConnection.close();
+  });
 }).catch(err => {
-    console.log('An error occurred while initializing the application.', err);
+  console.log('An error occurred while initializing the application.', err);
 });

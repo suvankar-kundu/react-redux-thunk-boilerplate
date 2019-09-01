@@ -5,38 +5,38 @@ import middlewareRequestParser from './middleware/middleware-request-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../../config/doc/swagger.json';
 import path from 'path';
-//#region Common components
+// #region Common components
 import ModelOfTRepository from '../data/repositories/modelOfTRepository';
 import middlewareCors from './middleware/middleware-cors';
-//#endregion
+// #endregion
 
-//#region User
+// #region User
 import UserModel from '../data/models/userModel';
 import UserController from '../service/controllers/userController';
 import UserRouter from '../service/routes/userRouter';
-//#endregion
+// #endregion
 
 export default async function (
-    logger,
-    dbConnection,
-    corsConfig,
-    securityConfig
+  logger,
+  dbConnection,
+  corsConfig,
+  securityConfig
 ) {
-    const app = express();
+  const app = express();
 
-    const userRepository = new ModelOfTRepository(UserModel(dbConnection));
-    const userController = new UserController(userRepository, logger);
-    const userRouter = new UserRouter(userRepository, userController);
+  const userRepository = new ModelOfTRepository(UserModel(dbConnection));
+  const userController = new UserController(userRepository, logger);
+  const userRouter = new UserRouter(userRepository, userController);
 
-    middlewareLogging(app, logger);
-    middlewareRequestParser(app);
-    middlewarePassport(app, userRepository, securityConfig);
-    middlewareCors(app, corsConfig);
+  middlewareLogging(app, logger);
+  middlewareRequestParser(app);
+  middlewarePassport(app, userRepository, securityConfig);
+  middlewareCors(app, corsConfig);
 
-    const apiRouter = express.Router();
-    app.use('/scripts', express.static(path.join(__dirname, './scripts')));
-    apiRouter.use('/user', userRouter.Router);
-    app.use('/api', apiRouter);
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-    return app;
+  const apiRouter = express.Router();
+  app.use('/scripts', express.static(path.join(__dirname, './scripts')));
+  apiRouter.use('/user', userRouter.Router);
+  app.use('/api', apiRouter);
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  return app;
 }

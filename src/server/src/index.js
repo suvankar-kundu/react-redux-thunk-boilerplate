@@ -6,25 +6,29 @@ import logConfig from '../config/development/log.json';
 import corsConfig from '../config/development/cors.json';
 import securityConfig from '../config/development/security.json';
 import path from 'path';
-//#region Common components
+
+
+
+
+
+// #region Common components
 import ApplicationLogger from './common/lib/logger';
-//#endregion
+// #endregion
 const PORT = process.env.PORT || 5000;
 Promise.all([
-    initDb(dbConfig.cnd)
+  initDb(dbConfig.cnd)
 ]).then(async ([dbConnection]) => {
-
-    const logger = new ApplicationLogger(logConfig);
-    const app = await appLication(logger, dbConnection, corsConfig, securityConfig);
-    app.use('/', (req, res) => {
-        res.sendFile(path.join(__dirname, './index.html'));
-    });
-    app.listen(PORT, () => {
-        logger.info(`Server started on port ${PORT}`);
-    });
-    process.on('SIGINT', async () => {
-        await dbConnection.close();
-    });
+  const logger = new ApplicationLogger(logConfig);
+  const app = await appLication(logger, dbConnection, corsConfig, securityConfig);
+  app.use('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './index.html'));
+  });
+  app.listen(PORT, () => {
+    logger.info(`Server started on port ${PORT}`);
+  });
+  process.on('SIGINT', async () => {
+    await dbConnection.close();
+  });
 }).catch(err => {
-    console.log('An error occurred while initializing the application.', err);
+  console.log('An error occurred while initializing the application.', err);
 });
